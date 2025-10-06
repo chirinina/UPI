@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ESAM - Sucre 2</title>
+    <title>Grupo Esam</title>
     <!-- Iconos de Bootstrap -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     <style>
@@ -17,7 +17,7 @@
             --border-color: #d1d9e0;
             --header-border: #f0f0f0;
             --shadow-color: rgba(0,0,0,0.05);
-            --btn-black-border: #1c1c1c; /* Borde negro para botones */
+            --btn-black-border: #1c1c1c;
         }
 
         [data-theme="dark"] {
@@ -29,7 +29,7 @@
             --border-color: #444;
             --header-border: #2c2c2c;
             --shadow-color: rgba(0,0,0,0.2);
-            --btn-black-border: #a0a0a0; /* Borde más claro en modo oscuro para contraste */
+            --btn-black-border: #a0a0a0;
         }
 
         body, html {
@@ -47,8 +47,12 @@
             background-color: var(--surface-color);
             box-shadow: 0 4px 25px var(--shadow-color);
             transition: background-color 0.3s;
+            overflow-x: hidden; /* Evita el desbordamiento horizontal por las animaciones */
+            /* --- MODIFICACIÓN: AÑADIDO ESPACIO SUPERIOR PARA EL HEADER FIJO --- */
+            padding-top: 61px;
         }
 
+        /* --- MODIFICACIÓN: ESTILO PARA EL HEADER FIJO --- */
         .header {
             display: flex;
             justify-content: space-between;
@@ -57,7 +61,14 @@
             background-color: var(--surface-color);
             border-bottom: 1px solid var(--header-border);
             transition: background-color 0.3s, border-bottom 0.3s;
+            position: fixed; /* --- CAMBIO: de 'sticky' a 'fixed' para que no desaparezca --- */
+            top: 0;
+            left: 0;
+            width: 100%;
+            box-sizing: border-box; /* Asegura que el padding no afecte el ancho total */
+            z-index: 1000;
         }
+
         .logo { display: flex; align-items: center; gap: 12px; text-decoration: none;}
         .logo img { width: 40px; height: auto; }
         .logo-text { font-size: 1.3rem; font-weight: 600; color: var(--primary-color); }
@@ -65,17 +76,58 @@
         .navigation { display: flex; align-items: center; gap: 25px; }
         .nav-link { text-decoration: none; color: var(--text-color); font-weight: 500; font-size: 0.85rem; display: inline-flex; align-items: center; gap: 6px; }
         .nav-link .arrow-down { width: 0; height: 0; border-left: 4px solid transparent; border-right: 4px solid transparent; border-top: 5px solid var(--text-color); transition: border-color 0.3s; }
-        .search-icon { color: var(--text-color); font-size: 1.1rem; }
         
-        .theme-switcher { font-size: 1.4rem; cursor: pointer; color: var(--text-color); line-height: 1; }
-        .d-none { display: none; }
-
-        /* --- ESTILOS PARA EL MENÚ DESPLEGABLE --- */
-        .dropdown {
-            position: relative;
-            display: inline-block;
+        /* --- NUEVO: ESTILOS PARA LA BARRA DE BÚSQUEDA FUNCIONAL --- */
+        .search-container {
+            display: flex;
+            align-items: center;
+        }
+        .search-icon { 
+            color: var(--text-color); 
+            font-size: 1.1rem; 
+            cursor: pointer;
+            transition: color 0.3s;
+        }
+        .search-input {
+            width: 0;
+            padding: 0;
+            border: none;
+            outline: none;
+            opacity: 0;
+            transition: all 0.4s ease-in-out;
+            font-size: 0.85rem;
+            border-radius: 20px;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            margin-left: 0;
+        }
+        .search-container.active .search-input {
+            width: 180px;
+            opacity: 1;
+            padding: 6px 15px;
+            border: 1px solid var(--border-color);
+            margin-left: 10px;
         }
 
+        .theme-switcher { font-size: 1.4rem; cursor: pointer; color: var(--text-color); line-height: 1; }
+        .d-none { display: none; }
+        .hamburger { display: none; font-size: 1.8rem; cursor: pointer; }
+        .mobile-nav {
+            display: none;
+            flex-direction: column;
+            width: 100%;
+            background-color: var(--surface-color);
+            position: absolute;
+            top: 100%;
+            left: 0;
+            box-shadow: 0 8px 16px var(--shadow-color);
+            z-index: 999;
+        }
+        .mobile-nav a { padding: 15px 25px; text-decoration: none; color: var(--text-color); border-bottom: 1px solid var(--border-color); }
+        .mobile-nav a:last-child { border-bottom: none; }
+
+        /* --- ESTILOS PARA EL MENÚ DESPLEGABLE --- */
+        .dropdown { position: relative; display: inline-block; }
         .dropdown-menu {
             display: none;
             position: absolute;
@@ -87,92 +139,145 @@
             padding: 8px 0;
             border: 1px solid var(--border-color);
         }
-
-        .dropdown-menu a {
-            color: var(--text-color);
-            padding: 10px 16px;
-            text-decoration: none;
-            display: block;
-            font-size: 0.8rem;
-            font-weight: 500;
+        .dropdown-menu a { color: var(--text-color); padding: 10px 16px; text-decoration: none; display: block; font-size: 0.8rem; font-weight: 500; }
+        .dropdown-menu a:hover { background-color: var(--bg-color); }
+        .dropdown:hover .dropdown-menu { display: block; }
+        
+        /* --- NUEVAS ANIMACIONES --- */
+        @keyframes heroBackgroundAnimation {
+            0% { background-position: center 45%; }
+            100% { background-position: center 55%; }
         }
 
-        .dropdown-menu a:hover {
-             background-color: var(--bg-color);
+        @keyframes slideInFromLeft {
+            0% { transform: translateX(-100px); opacity: 0; }
+            100% { transform: translateX(0); opacity: 1; }
         }
 
-        .dropdown:hover .dropdown-menu {
-            display: block;
-        }
-        /* --- FIN DE ESTILOS DEL MENÚ --- */
-
-
-        .hero {
-            background: linear-gradient(rgba(0, 20, 40, 0.65), rgba(0, 20, 40, 0.65)), url('https://images.pexels.com/photos/2387873/pexels-photo-2387873.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1') no-repeat center center;
-            background-size: cover;
-            padding: 50px 20px;
-            text-align: center;
-            color: white;
-        }
-        .hero h1 { margin: 0; font-size: 2.8rem; font-weight: 900; text-shadow: 1px 1px 6px rgba(0,0,0,0.8); }
-        .hero .highlight { color: var(--accent-color); }
-        .hero .hashtag { margin-top: 8px; font-size: 1.2rem; font-weight: 500; color: rgba(255, 255, 255, 0.95); }
-
-        .main-content {
-            padding: 25px 0;
-            background-color: var(--bg-color);
-            transition: background-color 0.3s;
+        @keyframes slideInFromRight {
+            0% { transform: translateX(100px); opacity: 0; }
+            100% { transform: translateX(0); opacity: 1; }
         }
         
-        .buttons-container {
-            max-width: 1100px;
-            margin: 0 auto;
-            padding: 0 25px;
+        .hero {
+            background: linear-gradient(rgba(0, 20, 40, 0.65), rgba(0, 20, 40, 0.65)), url('https://images.pexels.com/photos/267885/pexels-photo-267885.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1') no-repeat center center;
+            background-size: cover;
+            padding: 80px 40px;
+            display: flex;
+            justify-content: flex-end;
+            align-items: center;
+            text-align: right;
+            color: white;
+            min-height: 300px;
+            /* --- MODIFICACIÓN: ELIMINADO 'position: sticky' PARA SIMPLIFICAR EL SCROLL --- */
+            z-index: 1;
+            /* --- MODIFICACIÓN: ANIMACIÓN MÁS RÁPIDA --- */
+            animation: heroBackgroundAnimation 15s ease-in-out infinite alternate;
+        }
+        .hero-content { max-width: 50%; }
+        .hero h1 { margin: 0; font-size: 3rem; font-weight: 900; text-shadow: 2px 2px 8px rgba(0,0,0,0.8); }
+        .hero .highlight { color: var(--accent-color); }
+        .hero .hashtag { margin-top: 12px; font-size: 1.4rem; font-weight: 500; color: rgba(255, 255, 255, 0.95); }
+
+        /* --- ESTILO PARA EL CONTENIDO QUE SE DESPLAZA --- */
+        .main-content { 
+            padding: 40px 0 100px; 
+            background-color: var(--bg-color); 
+            transition: background-color 0.3s;
+            position: relative;
+            z-index: 2;
+            margin-top: -30px;
+            border-top-left-radius: 25px;
+            border-top-right-radius: 25px;
+            box-shadow: 0 -10px 20px rgba(0,0,0,0.1);
         }
 
+        .buttons-container { max-width: 1100px; margin: 0 auto; padding: 0 25px; }
         .button-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 12px;
+            gap: 15px;
         }
         
         .btn {
-            padding: 3px 10px;
+            padding: 3px 8px;
             text-align: center;
             text-decoration: none;
             border: 1px solid var(--btn-black-border);
-            font-size: 0.8rem;
+            font-size: 0.9rem;
             font-weight: 600;
             letter-spacing: 0.5px;
             transition: all 0.25s ease-in-out;
             cursor: pointer;
             display: block;
             border-radius: 2px;
+            opacity: 0; /* Inician invisibles */
+            animation-fill-mode: forwards; /* Mantiene el estado final de la animación */
+        }
+        
+        .button-grid .btn:nth-child(odd), .bottom-buttons .btn:nth-child(odd) {
+            animation-name: slideInFromLeft;
+        }
+        .button-grid .btn:nth-child(even), .bottom-buttons .btn:nth-child(even) {
+            animation-name: slideInFromRight;
         }
 
+        /* --- Retrasos escalonados para un efecto más suave --- */
+        .button-grid a:nth-child(1) { animation-delay: 0.1s; animation-duration: 0.7s; }
+        .button-grid a:nth-child(2) { animation-delay: 0.2s; animation-duration: 0.7s; }
+        .button-grid a:nth-child(3) { animation-delay: 0.3s; animation-duration: 0.7s; }
+        .button-grid a:nth-child(4) { animation-delay: 0.4s; animation-duration: 0.7s; }
+        .button-grid a:nth-child(5) { animation-delay: 0.5s; animation-duration: 0.7s; }
+        .button-grid a:nth-child(6) { animation-delay: 0.6s; animation-duration: 0.7s; }
+        .button-grid a:nth-child(7) { animation-delay: 0.7s; animation-duration: 0.7s; }
+        .button-grid a:nth-child(8) { animation-delay: 0.8s; animation-duration: 0.7s; }
+        .button-grid a:nth-child(9) { animation-delay: 0.9s; animation-duration: 0.7s; }
+
+        .bottom-buttons a:nth-child(1) { animation-delay: 1s; animation-duration: 0.7s; }
+        .bottom-buttons a:nth-child(2) { animation-delay: 1.1s; animation-duration: 0.7s; }
+
         .btn-dark { background-color: var(--primary-color); color: var(--primary-text); border-color: var(--primary-color); }
-        .btn-dark:hover { background-color: #021e79; border-color: #00158d; transform: translateY(-2px); }
+        .btn-dark:hover { background-color: #021e79; border-color: #00158d; transform: translateY(-3px); box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
         .btn-light { background-color: transparent; color: var(--text-color); }
-        .btn-light:hover { background-color: var(--surface-color); transform: translateY(-2px); }
+        .btn-light:hover { background-color: var(--surface-color); transform: translateY(-3px); box-shadow: 0 4px 10px rgba(0,0,0,0.05); }
         
         .bottom-buttons {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 12px;
-            margin-top: 12px;
+            gap: 15px;
+            margin-top: 15px;
         }
 
+        /* --- MODIFICACIÓN: ESTILOS PARA EL PIE DE PÁGINA FIJO --- */
         .footer {
             text-align: center;
-            padding: 15px;
+            padding: 20px;
             background-color: var(--surface-color);
-            font-size: 0.75rem;
+            font-size: 0.85rem;
             color: #777;
-            border-top: 1px solid var(--header-border);
-            transition: background-color 0.3s, border-top 0.3s;
+            border-top: 1px solid var(--border-color);
+            position: sticky;
+            bottom: 0;
+            z-index: 3;
+            transition: background-color 0.3s, color 0.3s, border-color 0.3s;
         }
-        .footer p { margin: 3px 0; }
+        .footer p { margin: 5px 0; }
         [data-theme="dark"] .footer { color: #aaa; }
+
+        /* --- MEDIA QUERIES PARA RESPONSIVIDAD --- */
+        @media (max-width: 768px) {
+            .navigation .nav-link, .navigation .dropdown, .navigation .search-container { display: none; } /* Ocultar contenedor de búsqueda en móvil */
+            .hamburger { display: block; }
+            .hero {
+                justify-content: center;
+                text-align: center;
+                padding: 60px 20px;
+            }
+            .hero-content { max-width: 100%; }
+            .hero h1 { font-size: 2.5rem; }
+            .hero .hashtag { font-size: 1.2rem; }
+            .button-grid, .bottom-buttons { grid-template-columns: 1fr; }
+        }
     </style>
 </head>
 <body>
@@ -181,35 +286,52 @@
         <header class="header">
             <a href="#" class="logo">
                 <img src="/logo esam.png" alt="Logo ESAM">
-                <span class="logo-text">ESAM - Sucre 2</span>
+                <span class="logo-text"></span>
             </a>
             <nav class="navigation">
-                <!-- INICIO DEL MENÚ DESPLEGABLE -->
+                <!-- MENÚ PARA ESCRITORIO -->
                 <div class="dropdown">
-                    <a href="#" class="nav-link">PAGINA PRINCIPAL <span class="arrow-down"></span></a>
+                    <a href="#" class="nav-link">Ir a<span class="arrow-down"></span></a>
                     <div class="dropdown-menu">
                         <a href="/opcion1">MARKETING</a>
                         <a href="/opcion2">CONTABLE</a>
-                        <a href="/opcion3">ACADEMICOS</a>
-                        <a href="/opcion4">DISEÑO GRAFICO</a>
+                        <a href="/opcion3">ACADÉMICOS</a>
+                        <a href="/opcion4">DISEÑO GRÁFICO</a>
                         <a href="/opcion5">TI</a>
-                        <a href="/opcion5">UPI</a>
+                        <a href="/opcion6">UPI</a>
                     </div>
                 </div>
-                <!-- FIN DEL MENÚ DESPLEGABLE -->
-
-                <a href="#" class="search-icon"><i class="bi bi-search"></i></a>
+                <!-- --- MODIFICACIÓN: ESTRUCTURA HTML PARA LA BÚSQUEDA --- -->
+                <div class="search-container" id="search-container">
+                    <i class="bi bi-search search-icon" id="search-icon"></i>
+                    <input type="search" class="search-input" id="search-input" placeholder="Buscar...">
+                </div>
                 <div id="theme-switcher" class="theme-switcher" title="Cambiar tema">
                     <i class="bi bi-sun-fill" id="sun-icon"></i>
                     <i class="bi bi-moon-stars-fill d-none" id="moon-icon"></i>
                 </div>
             </nav>
+            <div class="hamburger">
+                <i class="bi bi-list"></i>
+            </div>
+            <!-- MENÚ PARA MÓVILES -->
+            <nav class="mobile-nav" id="mobile-nav">
+                <a href="/opcion1">MARKETING</a>
+                <a href="/opcion2">CONTABLE</a>
+                <a href="/opcion3">ACADÉMICOS</a>
+                <a href="/opcion4">DISEÑO GRÁFICO</a>
+                <a href="/opcion5">TI</a>
+                <a href="/opcion6">UPI</a>
+                <a href="#">BÚSQUEDA</a>
+            </nav>
         </header>
 
         <section class="hero">
-            <h1>¡GERENTE REGIONAL</h1>
-            <h1 class="highlight">Sucre 2!</h1>
-            <p class="hashtag">#Posgrados</p>
+            <div class="hero-content">
+                <h1>¡GERENTE REGIONAL</h1>
+                <h1 class="highlight">Sucre 2!</h1>
+                <p class="hashtag">#Posgrados</p>
+            </div>
         </section>
 
         <main class="main-content">
@@ -217,12 +339,13 @@
                 <div class="button-grid">
                     <a href="/inscripciones" class="btn btn-dark">MARKETING</a>
                     <a href="/programas" class="btn btn-dark">CONTABLE</a>
-                    <a href="/portafolio" class="btn btn-dark">ACADEMICOS</a>
-                    <a href="/documentos" class="btn btn-light">DISEÑO GRAFICO</a>
+                    <a href="/portafolio" class="btn btn-dark">ACADÉMICOS</a>
+                    <a href="/documentos" class="btn btn-light">DISEÑO GRÁFICO</a>
                     <a href="/webinars" class="btn btn-light">TI</a>
-                    <a href="/diseno" class="btn btn-light">DISEÑO GRAFICO</a>
-                    
-                    
+                    <a href="/diseno" class="btn btn-light">DISEÑO GRÁFICO</a>
+                    <a href="#" class="btn btn-dark">NUEVO BOTÓN 1</a>
+                    <a href="#" class="btn btn-light">NUEVO BOTÓN 2</a>
+                    <a href="#" class="btn btn-dark">NUEVO BOTÓN 3</a>
                 </div>
                 <div class="bottom-buttons">
                     <a href="/comisiones" class="btn btn-dark">UPI </a>
@@ -230,15 +353,15 @@
                 </div>
             </div>
         </main>
-
+        
         <footer class="footer">
-            <p>Copyright © 2025</p>
-            <p>Desarrollado por ESAM - Sucre 2</p>
+            <p>Desarrollado por Esam - Sucre 2</p>
         </footer>
     </div>
 
     <script>
         document.addEventListener('DOMContentLoaded', () => {
+            // --- CÓDIGO EXISTENTE PARA EL TEMA Y MENÚ MÓVIL ---
             const themeSwitcher = document.getElementById('theme-switcher');
             const sunIcon = document.getElementById('sun-icon');
             const moonIcon = document.getElementById('moon-icon');
@@ -265,6 +388,27 @@
                 const currentTheme = htmlElement.getAttribute('data-theme');
                 const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
                 applyTheme(newTheme);
+            });
+
+            const hamburger = document.querySelector('.hamburger');
+            const mobileNav = document.getElementById('mobile-nav');
+
+            hamburger.addEventListener('click', () => {
+                const isVisible = mobileNav.style.display === 'flex';
+                mobileNav.style.display = isVisible ? 'none' : 'flex';
+            });
+
+            // --- NUEVO CÓDIGO PARA LA FUNCIONALIDAD DE BÚSQUEDA ---
+            const searchContainer = document.getElementById('search-container');
+            const searchIcon = document.getElementById('search-icon');
+            const searchInput = document.getElementById('search-input');
+
+            searchIcon.addEventListener('click', () => {
+                searchContainer.classList.toggle('active');
+                // Si la barra de búsqueda se activa, enfocar el campo de texto
+                if (searchContainer.classList.contains('active')) {
+                    searchInput.focus();
+                }
             });
         });
     </script>
