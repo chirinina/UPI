@@ -11,7 +11,7 @@
             --bg-color: #e9eef2;
             --surface-color: #ffffff;
             --text-color: #333;
-            --primary-color: #002b4e;
+            --primary-color: #04256d;
             --primary-text: #ffffff;
             --accent-color: #f9a602;
             --border-color: #d1d9e0;
@@ -24,7 +24,7 @@
             --bg-color: #121212;
             --surface-color: #1e1e1e;
             --text-color: #e0e0e0;
-            --primary-color: #003f72;
+            --primary-color: #061f92;
             --accent-color: #ffb703;
             --border-color: #444;
             --header-border: #2c2c2c;
@@ -64,11 +64,48 @@
 
         .navigation { display: flex; align-items: center; gap: 25px; }
         .nav-link { text-decoration: none; color: var(--text-color); font-weight: 500; font-size: 0.85rem; display: inline-flex; align-items: center; gap: 6px; }
-        .nav-link .arrow-down { width: 0; height: 0; border-left: 4px solid transparent; border-right: 4px solid transparent; border-top: 5px solid var(--text-color); }
+        .nav-link .arrow-down { width: 0; height: 0; border-left: 4px solid transparent; border-right: 4px solid transparent; border-top: 5px solid var(--text-color); transition: border-color 0.3s; }
         .search-icon { color: var(--text-color); font-size: 1.1rem; }
         
         .theme-switcher { font-size: 1.4rem; cursor: pointer; color: var(--text-color); line-height: 1; }
         .d-none { display: none; }
+
+        /* --- ESTILOS PARA EL MENÚ DESPLEGABLE --- */
+        .dropdown {
+            position: relative;
+            display: inline-block;
+        }
+
+        .dropdown-menu {
+            display: none;
+            position: absolute;
+            background-color: var(--surface-color);
+            min-width: 220px;
+            box-shadow: 0px 8px 16px 0px var(--shadow-color);
+            z-index: 1;
+            border-radius: 4px;
+            padding: 8px 0;
+            border: 1px solid var(--border-color);
+        }
+
+        .dropdown-menu a {
+            color: var(--text-color);
+            padding: 10px 16px;
+            text-decoration: none;
+            display: block;
+            font-size: 0.8rem;
+            font-weight: 500;
+        }
+
+        .dropdown-menu a:hover {
+             background-color: var(--bg-color);
+        }
+
+        .dropdown:hover .dropdown-menu {
+            display: block;
+        }
+        /* --- FIN DE ESTILOS DEL MENÚ --- */
+
 
         .hero {
             background: linear-gradient(rgba(0, 20, 40, 0.65), rgba(0, 20, 40, 0.65)), url('https://images.pexels.com/photos/2387873/pexels-photo-2387873.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1') no-repeat center center;
@@ -82,16 +119,15 @@
         .hero .hashtag { margin-top: 8px; font-size: 1.2rem; font-weight: 500; color: rgba(255, 255, 255, 0.95); }
 
         .main-content {
-            padding: 25px 0; /* Eliminado el padding lateral de aquí */
+            padding: 25px 0;
             background-color: var(--bg-color);
             transition: background-color 0.3s;
         }
         
-        /* --- AJUSTE: Contenedor para los botones con margen lateral --- */
         .buttons-container {
-            max-width: 1100px; /* Ancho máximo del contenido de botones */
-            margin: 0 auto; /* Centrar el contenedor */
-            padding: 0 25px; /* Espacio lateral */
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 0 25px;
         }
 
         .button-grid {
@@ -100,12 +136,11 @@
             gap: 12px;
         }
         
-        /* --- AJUSTE: Botones más delgados y con borde negro --- */
         .btn {
-            padding: 3px 10px; /* Aún más delgados */
+            padding: 3px 10px;
             text-align: center;
             text-decoration: none;
-            border: 1px solid var(--btn-black-border); /* Borde negro definido */
+            border: 1px solid var(--btn-black-border);
             font-size: 0.8rem;
             font-weight: 600;
             letter-spacing: 0.5px;
@@ -115,9 +150,9 @@
             border-radius: 2px;
         }
 
-        .btn-dark { background-color: var(--primary-color); color: var(--primary-text); }
-        .btn-dark:hover { background-color: #004a8d; border-color: #004a8d; transform: translateY(-2px); }
-        .btn-light { background-color: transparent; color: var(--text-color); } /* Color de texto ajustado */
+        .btn-dark { background-color: var(--primary-color); color: var(--primary-text); border-color: var(--primary-color); }
+        .btn-dark:hover { background-color: #021e79; border-color: #00158d; transform: translateY(-2px); }
+        .btn-light { background-color: transparent; color: var(--text-color); }
         .btn-light:hover { background-color: var(--surface-color); transform: translateY(-2px); }
         
         .bottom-buttons {
@@ -149,7 +184,18 @@
                 <span class="logo-text">ESAM - Upi</span>
             </a>
             <nav class="navigation">
-                <a href="#" class="nav-link">PAGINA PRINCIPAL <span class="arrow-down"></span></a>
+                <!-- INICIO DEL MENÚ DESPLEGABLE -->
+                <div class="dropdown">
+                    <a href="#" class="nav-link">PAGINA PRINCIPAL <span class="arrow-down"></span></a>
+                    <div class="dropdown-menu">
+                        <a href="/opcion1">Maestrías</a>
+                        <a href="/opcion2">Diplomados</a>
+                        <a href="/opcion3">Cursos de Especialización</a>
+                        <a href="/opcion4">Contacto</a>
+                    </div>
+                </div>
+                <!-- FIN DEL MENÚ DESPLEGABLE -->
+
                 <a href="#" class="search-icon"><i class="bi bi-search"></i></a>
                 <div id="theme-switcher" class="theme-switcher" title="Cambiar tema">
                     <i class="bi bi-sun-fill" id="sun-icon"></i>
@@ -165,7 +211,7 @@
         </section>
 
         <main class="main-content">
-            <div class="buttons-container"> <!-- Contenedor añadido aquí -->
+            <div class="buttons-container">
                 <div class="button-grid">
                     <a href="/inscripciones" class="btn btn-dark">INSCRIPCIONES</a>
                     <a href="/programas" class="btn btn-dark">PROGRAMAS UPI</a>
