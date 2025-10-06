@@ -15,7 +15,7 @@
     <style>
         :root {
             --bg-color: #e9eef2;
-            --surface-color: #ffffff;
+            --surface-color: #e9eef2;
             --text-color: #333;
             --primary-color: #02153f;
             --primary-text: #ffffff;
@@ -53,8 +53,7 @@
             background-color: var(--surface-color);
             box-shadow: 0 4px 25px var(--shadow-color);
             transition: background-color 0.3s;
-            overflow-x: hidden; /* Evita el desbordamiento horizontal por las animaciones */
-            /* --- MODIFICACIÓN: AÑADIDO ESPACIO SUPERIOR PARA EL HEADER FIJO --- */
+            overflow-x: hidden; 
             padding-top: 61px;
         }
 
@@ -83,7 +82,7 @@
         .nav-link { text-decoration: none; color: var(--text-color); font-weight: 500; font-size: 0.85rem; display: inline-flex; align-items: center; gap: 6px; }
         .nav-link .arrow-down { width: 0; height: 0; border-left: 4px solid transparent; border-right: 4px solid transparent; border-top: 5px solid var(--text-color); transition: border-color 0.3s; }
         
-        /* --- NUEVO: ESTILOS PARA LA BARRA DE BÚSQUEDA FUNCIONAL --- */
+        
         .search-container {
             display: flex;
             align-items: center;
@@ -132,7 +131,7 @@
         .mobile-nav a { padding: 15px 25px; text-decoration: none; color: var(--text-color); border-bottom: 1px solid var(--border-color); }
         .mobile-nav a:last-child { border-bottom: none; }
 
-        /* --- ESTILOS PARA EL MENÚ DESPLEGABLE --- */
+       
         .dropdown { position: relative; display: inline-block; }
         .dropdown-menu {
             display: none;
@@ -149,7 +148,7 @@
         .dropdown-menu a:hover { background-color: var(--bg-color); }
         .dropdown:hover .dropdown-menu { display: block; }
         
-        /* --- NUEVAS ANIMACIONES --- */
+        
         @keyframes heroBackgroundAnimation {
             0% { background-position: center 45%; }
             100% { background-position: center 55%; }
@@ -176,7 +175,6 @@
             color: white;
             min-height: 300px;
             z-index: 1;
-            /* --- MODIFICACIÓN: Animación más rápida (de 15s a 8s) --- */
             animation: heroBackgroundAnimation 9s ease-in-out infinite alternate;
         }
         .hero-content { max-width: 50%; }
@@ -184,7 +182,7 @@
         .hero .highlight { color: var(--accent-color); }
         .hero .hashtag { margin-top: 12px; font-size: 1.4rem; font-weight: 500; color: rgba(255, 255, 255, 0.95); }
 
-        /* --- ESTILO PARA EL CONTENIDO QUE SE DESPLAZA --- */
+        
         .main-content { 
             padding: 40px 0 100px; 
             background-color: var(--bg-color); 
@@ -216,8 +214,8 @@
             cursor: pointer;
             display: block;
             border-radius: 200px 200px 1px;
-            opacity: 0; /* Inician invisibles */
-            animation-fill-mode: forwards; /* Mantiene el estado final de la animación */
+            opacity: 0; 
+            animation-fill-mode: forwards; 
         }
         
         .button-grid .btn:nth-child(odd), .bottom-buttons .btn:nth-child(odd) {
@@ -256,7 +254,7 @@
         /* --- MODIFICACIÓN: ESTILOS PARA EL PIE DE PÁGINA FIJO --- */
         .footer {
             text-align: center;
-            padding: 20px;
+            padding: 10px;
             background-color: var(--surface-color);
             font-size: 0.85rem;
             color: #777;
@@ -338,17 +336,17 @@
         <main class="main-content">
             <div class="buttons-container">
                 <div class="button-grid">
-                    <a href="/inscripciones" class="btn btn-dark">MARKETING</a>
-                    <a href="/programas" class="btn btn-dark">CONTABLE</a>
-                    <a href="/portafolio" class="btn btn-dark">ACADÉMICOS</a>
-                    <a href="/documentos" class="btn btn-light">DISEÑO GRÁFICO</a>
-                    <a href="/webinars" class="btn btn-light">TI</a>
-                    <a href="/diseno" class="btn btn-light">DISEÑO GRÁFICO</a>
+                    <a href="/marketing" class="btn btn-dark">MARKETING</a>
+                    <a href="/contable" class="btn btn-dark">CONTABLE</a>
+                    <a href="/comisiones" class="btn btn-dark">ACADÉMICOS</a>
+                    <a href="/diseño" class="btn btn-light">DISEÑO GRÁFICO</a>
+                    <a href="/Ti" class="btn btn-light">TI</a>
+                    <a href="/diseno" class="btn btn-light">DOCUMENTOS</a>
                     <a href="#" class="btn btn-dark">NUEVO BOTÓN 1</a>
                     <a href="#" class="btn btn-light">NUEVO BOTÓN 2</a>
                 </div>
                 <div class="bottom-buttons">
-                    <a href="/comisiones" class="btn btn-dark">UPI </a>
+                    <a href="/Upi" class="btn btn-dark">UPI </a>
                     <a href="/equipo" class="btn btn-dark">EQUIPO UPI</a>
                 </div>
             </div>
